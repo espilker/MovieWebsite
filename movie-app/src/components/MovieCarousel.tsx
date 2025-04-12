@@ -1,79 +1,64 @@
+// src/components/CategoryCarousel.tsx
 import { useState, useEffect } from "react";
 import Slider from "react-slick";
-import { getPopularMovies } from "../services/tmbd";
-import { Movie } from "../types";
-import "./MovieCarousel.css";
+import { MovieWithRating } from "../types.ts";
+import { getMoviesWithRatings, getMovieRating } from "../services/api.ts";
+import { SliderSettings } from "../constants.ts";
 
 // Import required CSS from slick-carousel
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+// Import component-specific CSS
+import "./MovieCarousel.css";
 
-const MovieCarousel = () => {
-  const [movies, setMovies] = useState<Movie[]>([]);
+interface CategoryCarouselProps {
+  title: string;
+  endpoint: string;
+  onMovieClick: (movieId: number) => void;
+}
+
+const MovieCarousel = ({
+  title,
+  endpoint,
+  onMovieClick,
+}: CategoryCarouselProps) => {
+  // State for movies, loading and error states
+  const [movies, setMovies] = useState<MovieWithRating[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Fetch movies on component mount or when endpoint changes
   useEffect(() => {
     const fetchMovies = async () => {
       try {
         setLoading(true);
-        const data = await getPopularMovies();
-        setMovies(data.results);
+        const moviesData = await getMoviesWithRatings(endpoint);
+        setMovies(moviesData);
         setLoading(false);
       } catch (err) {
         console.error(err);
-        setError("Failed to fetch movies");
+        setError(`Failed to fetch ${title}`);
         setLoading(false);
       }
     };
 
     fetchMovies();
-  }, []);
-
-  // Settings for the slider
-  const settings = {
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 6,
-    slidesToScroll: 3,
-    initialSlide: 0,
-    responsive: [
-      {
-        breakpoint: 1200,
-        settings: {
-          slidesToShow: 4,
-          slidesToScroll: 2,
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  };
+  }, [endpoint, title]);
 
   if (loading) return <div className="loading-container">Loading...</div>;
   if (error) return <div className="error-container">{error}</div>;
 
   return (
     <div className="movie-carousel-section">
-      <h2 className="section-title">Popular Movies</h2>
+      <h2 className="section-title">{title}</h2>
       <div className="carousel-container">
-        <Slider {...settings}>
+        <Slider {...SliderSettings}>
           {movies.map((movie) => (
             <div key={movie.id} className="carousel-item">
-              <div className="movie-card">
+              <div
+                className="movie-card"
+                onClick={() => onMovieClick(movie.id)}
+              >
                 {movie.poster_path ? (
                   <img
                     src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -84,11 +69,16 @@ const MovieCarousel = () => {
                   <div className="no-poster">No poster</div>
                 )}
                 <div className="movie-info">
-                  <h1 className="movie-title">{movie.title}</h1>
-                  <div className="movie-release_date">{movie.release_date}</div>
-                  <div>{movie.genre_ids}</div>
-                  <div className="movie-rating">
-                    {movie.vote_average.toFixed(1)}/10
+                  <h3 className="movie-title">{movie.title}</h3>
+                  <div className="movie-ratings-row">
+                    {/* TMDB score */}
+                    <div className="movie-rating">
+                      {movie.vote_average.toFixed(1)}
+                    </div>
+                    {/* Age rating (PG, PG-13, etc.) */}
+                    <div className="movie-age-rating">
+                      {getMovieRating(movie)}
+                    </div>
                   </div>
                 </div>
               </div>

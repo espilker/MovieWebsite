@@ -1,0 +1,290 @@
+/* src/components/MovieDetails.css */
+
+/* Container for the entire details panel */
+.movie-details-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90vh; /* Takes up 90% of the viewport height */
+  background-color: #141414;
+  z-index: 1000;
+  overflow-y: auto;
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Animation for sliding up from bottom */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Main content container with padding */
+.movie-details-content {
+  position: relative;
+  padding: 30px 4%;
+  color: #ffffff;
+}
+
+/* Close button styling */
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Backdrop image styling */
+.backdrop-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background-size: cover;
+  background-position: center top;
+  z-index: 0;
+  opacity: 0.2;
+}
+
+/* Grid layout for the details */
+.details-grid {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 30px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Poster column styling */
+.poster-column {
+  max-width: 250px;
+}
+
+.details-poster {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.no-poster {
+  height: 375px;
+  background-color: #333;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+}
+
+/* Info column styling */
+.info-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.movie-title {
+  font-size: 2.2rem;
+  margin: 0;
+}
+
+.release-year {
+  font-weight: 400;
+  opacity: 0.8;
+  margin-left: 10px;
+}
+
+/* Movie facts styling */
+.movie-facts {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.movie-rating {
+  display: inline-block;
+  border: 1px solid #ffffff;
+  padding: 2px 8px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+/* Genres styling */
+.genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.genre {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 14px;
+}
+
+/* User score styling */
+.user-score {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 10px 0;
+}
+
+.score-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #081c22;
+  border: 3px solid #21d07a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-number {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.score-text {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* Overview styling */
+.overview h3,
+.director h3 {
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+.overview p {
+  margin: 0;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+/* Cast section styling */
+.cast-section {
+  margin-top: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.cast-section h3 {
+  margin-bottom: 20px;
+  font-size: 22px;
+}
+
+.cast-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
+}
+
+.cast-item {
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.actor-photo {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+}
+
+.no-photo {
+  width: 100%;
+  aspect-ratio: 2/3;
+  background-color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+}
+
+.actor-name,
+.character-name {
+  padding: 8px 10px;
+}
+
+.actor-name {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.character-name {
+  color: #ccc;
+  font-size: 12px;
+  padding-top: 0;
+}
+
+/* Trailer section styling */
+.trailer-section {
+  margin-top: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.trailer-section h3 {
+  margin-bottom: 20px;
+  font-size: 22px;
+}
+
+.trailer-container {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.trailer-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 8px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .poster-column {
+    max-width: 200px;
+    margin: 0 auto;
+  }
+
+  .movie-details-container {
+    height: 85vh;
+  }
+}

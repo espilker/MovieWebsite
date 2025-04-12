@@ -122,6 +122,14 @@
   text-overflow: ellipsis;
 }
 
+/* Updated to show TMDB score and age rating in a row */
+.movie-ratings-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 5px;
+}
+
 .movie-rating {
   display: inline-block;
   background-color: rgba(0, 0, 0, 0.6);
@@ -129,7 +137,16 @@
   padding: 2px 6px;
   border-radius: 4px;
   font-size: 12px;
-  margin-top: 5px;
+}
+
+/* New style for age rating */
+.movie-age-rating {
+  display: inline-block;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
 }
 
 /* Loading and Error styles */

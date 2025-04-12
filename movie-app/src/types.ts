@@ -1,4 +1,4 @@
-// Movie interface with common properties
+// Full movie details including all appended responses
 export interface Movie {
   id: number;
   title: string;
@@ -8,14 +8,17 @@ export interface Movie {
   release_date: string;
   vote_average: number;
   vote_count: number;
-  popularity: number;
   original_language: string;
-  genre_ids: number[];
-  adult: boolean;
-  video: boolean;
+  original_title: string;
+  genres: Genre[];
+  runtime: number;
+  status: string;
+  tagline: string;
+  credits?: Credits;
+  videos?: Videos;
+  release_dates?: ReleaseDates;
 }
-
-// Response from popular movies and search endpoints
+// Response from /movie endpoints that return lists of movies
 export interface MovieListResponse {
   page: number;
   results: Movie[];
@@ -23,70 +26,93 @@ export interface MovieListResponse {
   total_pages: number;
 }
 
-// Detailed movie information
-export interface MovieDetails extends Movie {
-  belongs_to_collection: null | {
-    id: number;
-    name: string;
-    poster_path: string | null;
-    backdrop_path: string | null;
-  };
-  budget: number;
-  genres: {
-    id: number;
-    name: string;
-  }[];
-  homepage: string | null;
-  imdb_id: string | null;
-  production_companies: {
-    id: number;
-    name: string;
-    logo_path: string | null;
-    origin_country: string;
-  }[];
-  production_countries: {
-    iso_3166_1: string;
-    name: string;
-  }[];
-  revenue: number;
-  runtime: number | null;
-  spoken_languages: {
-    iso_639_1: string;
-    name: string;
-    english_name: string;
-  }[];
-  status: string;
-  tagline: string | null;
+// Genre definition
+export interface Genre {
+  id: number;
+  name: string;
 }
 
-// Cast and crew information
+// Cast member definition
+export interface CastMember {
+  id: number;
+  name: string;
+  character: string;
+  profile_path: string | null;
+  gender: number;
+  order: number;
+  credit_id: string;
+  adult: boolean;
+  known_for_department: string;
+  original_name: string;
+  popularity: number;
+  cast_id: number;
+}
+
+// Crew member definition
+export interface CrewMember {
+  id: number;
+  name: string;
+  job: string;
+  department: string;
+  profile_path: string | null;
+  gender: number;
+  credit_id: string;
+  adult: boolean;
+  known_for_department: string;
+  original_name: string;
+  popularity: number;
+}
+
+// Credits response definition
 export interface Credits {
   id: number;
-  cast: {
-    adult: boolean;
-    gender: number | null;
-    id: number;
-    known_for_department: string;
-    name: string;
-    original_name: string;
-    popularity: number;
-    profile_path: string | null;
-    cast_id: number;
-    character: string;
-    credit_id: string;
-    order: number;
-  }[];
-  crew: {
-    adult: boolean;
-    gender: number | null;
-    id: number;
-    known_for_department: string;
-    name: string;
-    original_name: string;
-    popularity: number;
-    profile_path: string | null;
-    credit_id: string;
-    department: string;
-    job: string;
-  }[];
+  cast: CastMember[];
+  crew: CrewMember[];
+}
+
+// Video definition
+export interface Video {
+  id: string;
+  key: string;
+  name: string;
+  site: string;
+  size: number;
+  type: string;
+  official: boolean;
+  published_at: string;
+  iso_639_1: string;
+  iso_3166_1: string;
+}
+
+// Videos response definition
+export interface Videos {
+  id: number;
+  results: Video[];
+}
+
+// Release date definition
+export interface ReleaseDate {
+  certification: string;
+  iso_639_1: string;
+  note: string;
+  release_date: string;
+  type: number;
+  descriptors: string[];
+}
+
+// Release date result definition
+export interface ReleaseDateResult {
+  iso_3166_1: string;
+  release_dates: ReleaseDate[];
+}
+
+// Release dates response definition
+export interface ReleaseDates {
+  id: number;
+  results: ReleaseDateResult[];
+}
+
+// Movie with release dates for showing ratings
+export interface MovieWithRating extends Movie {
+  release_dates?: ReleaseDates;
 }

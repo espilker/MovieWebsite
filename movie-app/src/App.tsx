@@ -1,11 +1,10 @@
 import "./App.css";
-import MovieCarousel from "./components/MovieCarousel";
+import HomePage from "./components/HomePage";
 
 function App() {
   return (
     <>
-      Hello World, below is my movie carousel
-      <MovieCarousel />
+      <HomePage></HomePage>
     </>
   );
 }
