@@ -1,7 +1,7 @@
 // src/components/CategoryCarousel.tsx
 import { useState, useEffect } from "react";
 import Slider from "react-slick";
-import { MovieWithRating } from "../types.ts";
+import { Movie } from "../types.ts";
 import { getMoviesWithRatings, getMovieRating } from "../services/api.ts";
 import { SliderSettings } from "../constants.ts";
 
@@ -23,7 +23,7 @@ const MovieCarousel = ({
   onMovieClick,
 }: CategoryCarouselProps) => {
   // State for movies, loading and error states
-  const [movies, setMovies] = useState<MovieWithRating[]>([]);
+  const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 

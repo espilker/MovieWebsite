@@ -1,6 +1,7 @@
 import { useState } from "react";
 import MovieCarousel from "./MovieCarousel";
 import MovieDetails from "./MovieDetails";
+import DiscoverCarousel from "./DiscoverCarousel";
 import "./HomePage.css";
 import { carousels } from "../constants";
 
@@ -48,20 +49,27 @@ const HomePage = () => {
           ))}
         </div>
 
-        {/* Show only the active carousel - simpler approach */}
+        {/* Show only the active carousel or discover page */}
         <div className="carousel-content">
-          {carousels.map(
-            (carousel) =>
-              activeCarousel === carousel.id && (
-                <div key={carousel.id} className="active-carousel">
-                  <h2>{carousel.title}</h2>
+          {activeCarousel === "discover" ? (
+            // Render the discover carousel if active
+            <DiscoverCarousel
+              title="Discover Movies"
+              onMovieClick={handleMovieClick}
+            />
+          ) : (
+            // Otherwise render the selected carousel
+            carousels.map(
+              (carousel) =>
+                activeCarousel === carousel.id && (
                   <MovieCarousel
+                    key={carousel.id}
                     title={carousel.title}
                     endpoint={carousel.endpoint}
                     onMovieClick={handleMovieClick}
                   />
-                </div>
-              )
+                )
+            )
           )}
         </div>
       </main>

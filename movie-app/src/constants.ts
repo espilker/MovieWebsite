@@ -1,6 +1,7 @@
 //Carousels used in the App.tsx page
 
 export const carousels = [
+  { id: "discover", title: "Discover Movies", endpoint: "/discover" },
   { id: "popular", title: "Popular Movies", endpoint: "/movie/popular" },
   { id: "top_rated", title: "Top Rated", endpoint: "/movie/top_rated" },
   { id: "now_playing", title: "Now Playing", endpoint: "/movie/now_playing" },

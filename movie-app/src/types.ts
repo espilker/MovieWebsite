@@ -111,8 +111,3 @@ export interface ReleaseDates {
   id: number;
   results: ReleaseDateResult[];
 }
-
-// Movie with release dates for showing ratings
-export interface MovieWithRating extends Movie {
-  release_dates?: ReleaseDates;
-}

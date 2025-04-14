@@ -1,11 +1,6 @@
 // src/services/api.ts
 import axios from "axios";
-import {
-  Movie,
-  MovieListResponse,
-  MovieWithRating,
-  ReleaseDateResult,
-} from "../types";
+import { Movie, MovieListResponse, ReleaseDateResult } from "../types";
 
 // Create a base axios instance with common configuration
 const api = axios.create({
@@ -29,7 +24,7 @@ export const getMovies = async (endpoint: string): Promise<Movie[]> => {
 // Get a list of movies with their ratings
 export const getMoviesWithRatings = async (
   endpoint: string
-): Promise<MovieWithRating[]> => {
+): Promise<Movie[]> => {
   try {
     // First get the basic movie list
     const movies = await getMovies(endpoint);
@@ -105,9 +100,57 @@ export const getMovieRating = (
   return certification || "NR";
 };
 
+// Get list of all genres from TMDB
+export const getGenres = async (): Promise<{ id: number; name: string }[]> => {
+  try {
+    const response = await api.get("/genre/movie/list");
+    return response.data.genres;
+  } catch (error) {
+    console.error("Error fetching genres:", error);
+    throw error;
+  }
+};
+
+// Discover movies based on various criteria
+export const discoverMovies = async (
+  params: Record<string, string | number>
+): Promise<Movie[]> => {
+  try {
+    const response = await api.get<MovieListResponse>("/discover/movie", {
+      params,
+    });
+    console.log("/discover/movie", {
+      params,
+    });
+    return response.data.results;
+  } catch (error) {
+    console.error("Error discovering movies:", error);
+    throw error;
+  }
+};
+
+// function for searching movies by title/keyword
+export const searchMovies = async (query: string): Promise<Movie[]> => {
+  try {
+    const response = await api.get<MovieListResponse>("/search/movie", {
+      params: {
+        query: query,
+        include_adult: false,
+      },
+    });
+    return response.data.results;
+  } catch (error) {
+    console.error("Error searching movies:", error);
+    throw error;
+  }
+};
+
 export default {
   getMovies,
   getMoviesWithRatings,
   getMovieDetails,
   getMovieRating,
+  discoverMovies,
+  getGenres,
+  searchMovies,
 };
