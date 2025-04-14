@@ -1,4 +1,3 @@
-// src/components/MovieDetails.tsx
 import { useState, useEffect } from "react";
 import { getMovieDetails, getMovieRating } from "../services/api";
 import { Movie, Video, CastMember, CrewMember } from "../types";

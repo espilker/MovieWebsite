@@ -1,45 +1,46 @@
 import { useState, useEffect } from "react";
 import Slider from "react-slick";
 import { Movie } from "../types";
-import { discoverMovies, getGenres, getMovieRating } from "../services/api";
+import { discoverMovies, getGenres } from "../services/api";
 import { SliderSettings } from "../constants";
-
-// Import required CSS from slick-carousel
+import MovieDetails from "./MovieDetails.tsx";
+import Carousel from "./Carousel.tsx";
+import Loading from "./Loading.tsx";
+import Error from "./Error.tsx";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-// Import component-specific CSS
 import "./MovieCarousel.css";
 import "./DiscoverCarousel.css";
 
 interface DiscoverCarouselProps {
   title: string;
-  onMovieClick: (movieId: number) => void;
 }
 
-const DiscoverCarousel = ({ title, onMovieClick }: DiscoverCarouselProps) => {
-  // State for filters
+const DiscoverCarousel = ({ title }: DiscoverCarouselProps) => {
   const [actorName, setActorName] = useState<string>("");
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
-
-  // State for data
   const [movies, setMovies] = useState<Movie[]>([]);
   const [genres, setGenres] = useState<{ id: number; name: string }[]>([]);
-
-  // UI state
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
+  const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
 
-  // Fetch genres and initial movies when component mounts
+  //Functions to handle when a movie is clicked
+  const handleMovieClick = (movieId: number) => {
+    setSelectedMovieId(movieId);
+  };
+  const handleCloseDetails = () => {
+    setSelectedMovieId(null);
+  };
+
+  //Initializes movies to show popular ones
   useEffect(() => {
     const initialize = async () => {
       setIsLoading(true);
       try {
-        // Fetch genres
         const genreList = await getGenres();
         setGenres(genreList);
-
-        // Load initial popular movies
         const initialMovies = await discoverMovies({
           sort_by: "popularity.desc",
         });
@@ -56,21 +57,19 @@ const DiscoverCarousel = ({ title, onMovieClick }: DiscoverCarouselProps) => {
     initialize();
   }, []);
 
-  // Handle search submission
+  //Function for when a user searches for a movie
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
 
     try {
-      // Build search parameters
       const params: Record<string, string | number> = {
         sort_by: "popularity.desc",
       };
 
-      // Add actor search if provided
+      //API call to get actor ID if user entered an actor's name
       if (actorName.trim()) {
-        // First search for the actor to get their ID
         const actorResponse = await fetch(
           `https://api.themoviedb.org/3/search/person?api_key=${
             import.meta.env.VITE_API_KEY
@@ -79,7 +78,6 @@ const DiscoverCarousel = ({ title, onMovieClick }: DiscoverCarouselProps) => {
         const actorData = await actorResponse.json();
 
         if (actorData.results && actorData.results.length > 0) {
-          console.log(actorData);
           params.with_people = actorData.results[0].id;
         } else {
           setError(`No actors found with name "${actorName}"`);
@@ -88,15 +86,16 @@ const DiscoverCarousel = ({ title, onMovieClick }: DiscoverCarouselProps) => {
         }
       }
 
-      // Add selected genres if any
+      //Adds selected genres if user has chosen any genres
       if (selectedGenres.length > 0) {
         params.with_genres = selectedGenres.join(",");
       }
 
-      // Fetch movies with the specified parameters
+      //Actual API call to get list of movies based on parameters
       const searchResults = await discoverMovies(params);
       setMovies(searchResults);
 
+      //Handling if there was an error or no movies were found
       if (searchResults.length === 0) {
         setError("No movies found matching your criteria");
       }
@@ -108,7 +107,7 @@ const DiscoverCarousel = ({ title, onMovieClick }: DiscoverCarouselProps) => {
     }
   };
 
-  // Handle genre selection/deselection
+  //Function to toggle when a genre is selected
   const toggleGenre = (genreId: number) => {
     setSelectedGenres((prev) =>
       prev.includes(genreId)
@@ -122,6 +121,7 @@ const DiscoverCarousel = ({ title, onMovieClick }: DiscoverCarouselProps) => {
       <h2 className="section-title">{title}</h2>
 
       <form onSubmit={handleSearch} className="discover-form">
+        {/* Section for Actor searching */}
         <div className="form-controls">
           <div className="form-group">
             <label htmlFor="actor-name">Actor Name:</label>
@@ -137,6 +137,7 @@ const DiscoverCarousel = ({ title, onMovieClick }: DiscoverCarouselProps) => {
         </div>
 
         <div className="genre-selection">
+          {/* Section for Genere selection */}
           <label className="genre-label">Genres:</label>
           <div className="genre-tags">
             {genres.map((genre) => (
@@ -159,44 +160,26 @@ const DiscoverCarousel = ({ title, onMovieClick }: DiscoverCarouselProps) => {
         </button>
       </form>
 
-      {isLoading && <div className="loading-container">Loading movies...</div>}
-      {error && !isLoading && <div className="error-container">{error}</div>}
+      {isLoading && <Loading />}
+      {error && !isLoading && <Error message={error} />}
 
       {!isLoading && !error && movies.length > 0 && (
         <div className="carousel-container">
+          {/* Carousel component to display found movies */}
           <Slider {...SliderSettings}>
             {movies.map((movie) => (
-              <div key={movie.id} className="carousel-item">
-                <div
-                  className="movie-card"
-                  onClick={() => onMovieClick(movie.id)}
-                >
-                  {movie.poster_path ? (
-                    <img
-                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                      alt={movie.title}
-                      className="movie-poster"
-                    />
-                  ) : (
-                    <div className="no-poster">No poster</div>
-                  )}
-                  <div className="movie-info">
-                    <h3 className="movie-title">{movie.title}</h3>
-                    <div className="movie-ratings-row">
-                      <div className="movie-rating">
-                        {movie.vote_average.toFixed(1)}
-                      </div>
-                      <div className="movie-age-rating">
-                        {getMovieRating(movie)}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <Carousel
+                key={movie.id}
+                movie={movie}
+                handleMovieClick={handleMovieClick}
+              />
             ))}
           </Slider>
         </div>
       )}
+
+      {/* Movie detail component to show a movie when clicked */}
+      <MovieDetails movieId={selectedMovieId} onClose={handleCloseDetails} />
 
       {!isLoading && !error && movies.length === 0 && !isInitialLoad && (
         <div className="no-results">No movies found matching your criteria</div>
