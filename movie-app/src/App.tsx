@@ -16,17 +16,17 @@ const App: React.FC = () => {
       <Header />
       <div className="app">
         <header className="app-header">
-          <h1>My Movie Database</h1>
+          <h1>The Movie Manager</h1>
         </header>
 
         <main className="app-main">
-          {/* Create the navigation tabs */}
+          {/* Navigation Tabs */}
           <div className="carousel-nav">
             <Link to="/discover" className="carousel-nav-button">
-              Discover Movies
+              Searchy by Actor/Genre
             </Link>
             <Link to="/search" className="carousel-nav-button">
-              Search Movies
+              Search by Title
             </Link>
             <Link to="/popular" className="carousel-nav-button">
               Popular Movies
@@ -43,16 +43,15 @@ const App: React.FC = () => {
               </Link>
             )}
           </div>
-
-          {/* Define routes for each tab */}
+          {/* Routes for each tab */}
           <Routes>
             <Route
               path="/discover"
-              element={<DiscoverCarousel title="Discover Movies" />}
+              element={<DiscoverCarousel title="Searcy by Actor/Genre" />}
             />
             <Route
               path="/search"
-              element={<SearchCarousel title="Search Movies" />}
+              element={<SearchCarousel title="Search by Title" />}
             />
             <Route
               path="/popular"
@@ -88,7 +87,7 @@ const App: React.FC = () => {
               }
             />
             <Route path="/watchlist" element={<Watchlist />} />
-          </Routes>
+          </Routes>{" "}
         </main>
       </div>
     </Router>

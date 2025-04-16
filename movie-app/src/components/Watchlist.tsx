@@ -13,6 +13,7 @@ const Watchlist: React.FC = () => {
   const [totalPages, setTotalPages] = useState(0);
   const { user, isAuthenticated } = useAuth();
 
+  //Function to grab the watchlist
   useEffect(() => {
     const fetchWatchlist = async () => {
       if (!isAuthenticated || !user) {
@@ -42,6 +43,7 @@ const Watchlist: React.FC = () => {
     fetchWatchlist();
   }, [isAuthenticated, user, page]);
 
+  //Function handle page navigation
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setPage(newPage);
@@ -49,6 +51,7 @@ const Watchlist: React.FC = () => {
     }
   };
 
+  //Logic in case user isn't logged in
   if (!isAuthenticated) {
     return (
       <div className="watchlist-container not-authenticated">
@@ -76,6 +79,7 @@ const Watchlist: React.FC = () => {
     );
   }
 
+  //logic in case user has no movies in watch list
   if (movies.length === 0) {
     return (
       <div className="watchlist-container">

@@ -118,7 +118,7 @@ const DiscoverCarousel = ({ title }: DiscoverCarouselProps) => {
 
   return (
     <div className="discover-container">
-      <h2 className="section-title">{title}</h2>
+      <h2>{title}</h2>
 
       <form onSubmit={handleSearch} className="discover-form">
         {/* Section for Actor searching */}

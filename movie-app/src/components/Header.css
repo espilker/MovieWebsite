@@ -6,11 +6,15 @@
   justify-content: space-between;
   align-items: center;
   position: relative;
+  width: 100%;
+  padding-left: 0%;
+  padding-right: 0%;
 }
 
 .header-logo {
   display: flex;
   align-items: center;
+  margin-left: 0.5rem;
 }
 
 .header-logo-text {
@@ -29,6 +33,7 @@
 .user-section {
   display: flex;
   align-items: center;
+  padding-right: 10px;
 }
 
 .welcome-text {

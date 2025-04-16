@@ -1,4 +1,3 @@
-// src/contexts/AuthProvider.tsx
 import React, { useState, useEffect, ReactNode } from "react";
 import {
   createRequestToken,
@@ -26,7 +25,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           setUser(userData);
         })
         .catch(() => {
-          // Invalid session, remove it
           localStorage.removeItem("tmdb_session_id");
         })
         .finally(() => {
@@ -35,6 +33,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, []);
 
+  //handle user logging in
   const login = async (username: string, password: string) => {
     setIsLoading(true);
     setError(null);
@@ -63,6 +62,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  //hanlde user logging out
   const logout = async () => {
     setIsLoading(true);
     const sessionId = localStorage.getItem("tmdb_session_id");

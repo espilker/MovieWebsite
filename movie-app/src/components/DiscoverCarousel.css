@@ -1,5 +1,7 @@
 .discover-container {
   margin-bottom: 40px;
+  max-width: 1280px;
+  margin: auto;
 }
 
 .discover-form {

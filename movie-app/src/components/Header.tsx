@@ -31,7 +31,7 @@ const Header: React.FC = () => {
             fill="#01b4e4"
           />
         </svg>
-        <span className="header-logo-text">Movie Explorer</span>
+        <span className="header-logo-text">Movie Manager</span>
       </div>
 
       <div className="user-section">

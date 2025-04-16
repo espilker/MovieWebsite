@@ -55,7 +55,7 @@ const MovieCarousel: React.FC<MovieCarouselProps> = ({ title, endpoint }) => {
 
   return (
     <div className="movie-carousel-section">
-      <h2 className="section-title">{title}</h2>
+      <h2>{title}</h2>
       <div className="carousel-container">
         {/* Carousel Component to display movies */}
         <Slider {...SliderSettings}>

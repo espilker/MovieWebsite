@@ -3,13 +3,8 @@
 /* Base styles for the carousel section */
 .movie-carousel-section {
   margin: 3vw 0;
-}
-
-.section-title {
-  font-size: 1.4vw;
-  color: #ffffff;
-  font-weight: 700;
-  margin-bottom: 1vw;
+  max-width: 1280px;
+  margin: auto;
 }
 
 .carousel-container {
@@ -25,15 +20,16 @@
   top: 50%;
   display: block;
   width: 50px;
-  height: 100%;
+  height: 50px; /* Adjust height for better visibility */
   padding: 0;
   transform: translate(0, -50%);
   cursor: pointer;
   color: transparent;
   border: none;
   outline: none;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7); /* Darker background for better visibility */
   z-index: 1;
+  border-radius: 50%; /* Rounded buttons */
 }
 
 .slick-prev {
@@ -54,16 +50,24 @@
 
 .slick-prev:before,
 .slick-next:before {
-  font-size: 20px;
+  font-size: 25px; /* Increase font size for better visibility */
   line-height: 1;
-  opacity: 0.85;
+  opacity: 1; /* Full opacity for better visibility */
   color: white;
+}
+
+/* Hide any extra buttons */
+.slick-prev.slick-disabled,
+.slick-next.slick-disabled {
+  display: none !important;
 }
 
 /* Movie card styles */
 .carousel-item {
   padding: 0 5px;
   transition: transform 0.3s ease;
+  position: relative; /* Add this */
+  z-index: 1; /* Default z-index */
 }
 
 .movie-card {
@@ -71,16 +75,17 @@
   overflow: hidden;
   border-radius: 4px;
   background-color: #2a2a2a;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.3s ease; /* Changed from transform to all */
   cursor: pointer;
 }
-
+.carousel-item:hover {
+  z-index: 20; /* Higher z-index on hover to appear above other items */
+}
 .carousel-item:hover .movie-card {
   transform: scale(1.1);
-  z-index: 10;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+  /* Remove z-index from here as we're applying it to the parent */
 }
-
 .movie-poster {
   width: 100%;
   display: block;
