@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
-import { getMovieDetails, getMovieRating } from "../services/api";
+import {
+  getMovieDetails,
+  getMovieRating,
+  checkMovieWatchlistStatus,
+  addToWatchlist,
+  removeFromWatchlist,
+} from "../services/api";
+import { useAuth } from "../hooks/useAuth";
 import { Movie, Video, CastMember, CrewMember } from "../types";
 import "./MovieDetails.css";
 
@@ -14,6 +21,9 @@ const MovieDetails = ({ movieId, onClose }: MovieDetailsProps) => {
   const [movieDetails, setMovieDetails] = useState<Movie | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isInWatchlist, setIsInWatchlist] = useState(false);
+  const [watchlistLoading, setWatchlistLoading] = useState(false);
+  const { user, isAuthenticated } = useAuth();
 
   // Fetch movie details when the movieId changes
   useEffect(() => {
@@ -34,6 +44,50 @@ const MovieDetails = ({ movieId, onClose }: MovieDetailsProps) => {
 
     fetchMovieDetails();
   }, [movieId]);
+
+  // Check if movie is in user's watchlist when user or movie changes
+  useEffect(() => {
+    const checkWatchlistStatus = async () => {
+      if (!isAuthenticated || !user || !movieId) return;
+
+      try {
+        const sessionId = localStorage.getItem("tmdb_session_id");
+        if (!sessionId) return;
+
+        const watchlistStatus = await checkMovieWatchlistStatus(
+          movieId,
+          sessionId
+        );
+        setIsInWatchlist(watchlistStatus);
+      } catch (err) {
+        console.error("Error checking watchlist status:", err);
+      }
+    };
+
+    checkWatchlistStatus();
+  }, [isAuthenticated, user, movieId]);
+
+  const handleWatchlistToggle = async () => {
+    console.log("button was clicked");
+    if (!isAuthenticated || !user || !movieId) return;
+
+    try {
+      setWatchlistLoading(true);
+      const sessionId = localStorage.getItem("tmdb_session_id") as string;
+
+      if (isInWatchlist) {
+        await removeFromWatchlist(user.id, movieId, sessionId);
+      } else {
+        await addToWatchlist(user.id, movieId, sessionId);
+      }
+
+      setIsInWatchlist(!isInWatchlist);
+    } catch (err) {
+      console.error("Error updating watchlist:", err);
+    } finally {
+      setWatchlistLoading(false);
+    }
+  };
 
   // If no movie is selected, don't render anything
   if (!movieId) return null;
@@ -102,9 +156,63 @@ const MovieDetails = ({ movieId, onClose }: MovieDetailsProps) => {
     <div className="movie-details-container">
       <div className="movie-details-content">
         {/* Close button */}
-        <button className="close-button" onClick={onClose}>
-          &times;
-        </button>
+        <div className="actions">
+          <button className="close-button" onClick={onClose}>
+            &times;
+          </button>
+          {isAuthenticated && (
+            <button
+              className={`watchlist-button ${
+                isInWatchlist ? "in-watchlist" : ""
+              }`}
+              onClick={handleWatchlistToggle}
+              disabled={watchlistLoading}
+            >
+              {watchlistLoading ? (
+                "Updating..."
+              ) : isInWatchlist ? (
+                <>
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                      fill="currentColor"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  In Watchlist
+                </>
+              ) : (
+                <>
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  Add to Watchlist
+                </>
+              )}
+            </button>
+          )}
+        </div>
 
         {/* Background image */}
         {movieDetails.backdrop_path && (

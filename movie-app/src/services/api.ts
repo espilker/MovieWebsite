@@ -1,4 +1,3 @@
-// src/services/api.ts
 import axios from "axios";
 import { Movie, MovieListResponse, ReleaseDateResult } from "../types";
 
@@ -9,6 +8,178 @@ const api = axios.create({
     api_key: import.meta.env.VITE_API_KEY,
   },
 });
+
+// Authentication functions
+export const createRequestToken = async (): Promise<{
+  request_token: string;
+}> => {
+  try {
+    const response = await api.get("/authentication/token/new");
+    return response.data;
+  } catch (error) {
+    console.error("Error creating request token:", error);
+    throw error;
+  }
+};
+
+export const createSessionWithLogin = async (
+  username: string,
+  password: string,
+  requestToken: string
+): Promise<{ request_token: string }> => {
+  try {
+    const response = await api.post(
+      "/authentication/token/validate_with_login",
+      {
+        username,
+        password,
+        request_token: requestToken,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error validating token with login:", error);
+    throw error;
+  }
+};
+
+export const createSession = async (
+  requestToken: string
+): Promise<{ session_id: string }> => {
+  try {
+    const response = await api.post("/authentication/session/new", {
+      request_token: requestToken,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error creating session:", error);
+    throw error;
+  }
+};
+
+export const getAccountDetails = async (
+  sessionId: string
+): Promise<{ id: number; username: string; name: string }> => {
+  try {
+    const response = await api.get("/account", {
+      params: {
+        session_id: sessionId,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching account details:", error);
+    throw error;
+  }
+};
+
+export const deleteSession = async (
+  sessionId: string
+): Promise<{ success: boolean }> => {
+  try {
+    const response = await api.delete("/authentication/session", {
+      data: {
+        session_id: sessionId,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting session:", error);
+    throw error;
+  }
+};
+
+// Add a movie to the user's watchlist
+export const addToWatchlist = async (
+  accountId: number,
+  movieId: number,
+  sessionId: string
+): Promise<{ success: boolean }> => {
+  try {
+    const response = await api.post(
+      `/account/${accountId}/watchlist`,
+      {
+        media_type: "movie",
+        media_id: movieId,
+        watchlist: true,
+      },
+      {
+        params: {
+          session_id: sessionId,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error adding movie to watchlist:", error);
+    throw error;
+  }
+};
+
+// Remove a movie from the user's watchlist
+export const removeFromWatchlist = async (
+  accountId: number,
+  movieId: number,
+  sessionId: string
+): Promise<{ success: boolean }> => {
+  try {
+    const response = await api.post(
+      `/account/${accountId}/watchlist`,
+      {
+        media_type: "movie",
+        media_id: movieId,
+        watchlist: false,
+      },
+      {
+        params: {
+          session_id: sessionId,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error removing movie from watchlist:", error);
+    throw error;
+  }
+};
+
+// Check if a movie is in the user's watchlist
+export const checkMovieWatchlistStatus = async (
+  movieId: number,
+  sessionId: string
+): Promise<boolean> => {
+  try {
+    const response = await api.get(`/movie/${movieId}/account_states`, {
+      params: {
+        session_id: sessionId,
+      },
+    });
+    return response.data.watchlist;
+  } catch (error) {
+    console.error("Error checking movie watchlist status:", error);
+    throw error;
+  }
+};
+
+// Get the user's watchlist movies
+export const getWatchlist = async (
+  accountId: number,
+  sessionId: string,
+  page: number = 1
+): Promise<MovieListResponse> => {
+  try {
+    const response = await api.get(`/account/${accountId}/watchlist/movies`, {
+      params: {
+        session_id: sessionId,
+        page,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching watchlist:", error);
+    throw error;
+  }
+};
 
 // Get a list of movies from a specific endpoint
 export const getMovies = async (endpoint: string): Promise<Movie[]> => {
@@ -110,4 +281,13 @@ export default {
   discoverMovies,
   getGenres,
   searchMovies,
+  createRequestToken,
+  createSessionWithLogin,
+  createSession,
+  getAccountDetails,
+  deleteSession,
+  addToWatchlist,
+  removeFromWatchlist,
+  checkMovieWatchlistStatus,
+  getWatchlist,
 };

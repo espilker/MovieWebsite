@@ -2,12 +2,18 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import MovieCarousel from "./components/MovieCarousel";
 import DiscoverCarousel from "./components/DiscoverCarousel";
+import Watchlist from "./components/Watchlist";
+import Header from "./components/Header";
 import "./App.css";
 import SearchCarousel from "./components/SearchCarousel";
+import { useAuth } from "./hooks/useAuth";
 
 const App: React.FC = () => {
+  const { isAuthenticated } = useAuth();
+
   return (
     <Router>
+      <Header />
       <div className="app">
         <header className="app-header">
           <h1>My Movie Database</h1>
@@ -31,6 +37,11 @@ const App: React.FC = () => {
             <Link to="/now_playing" className="carousel-nav-button">
               Now Playing
             </Link>
+            {isAuthenticated && (
+              <Link to="/watchlist" className="carousel-nav-button">
+                Watchlist
+              </Link>
+            )}
           </div>
 
           {/* Define routes for each tab */}
@@ -76,6 +87,7 @@ const App: React.FC = () => {
                 />
               }
             />
+            <Route path="/watchlist" element={<Watchlist />} />
           </Routes>
         </main>
       </div>

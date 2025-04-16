@@ -288,3 +288,44 @@
     height: 85vh;
   }
 }
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.watchlist-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  background-color: #01b4e4;
+  color: white;
+  z-index: 1001;
+}
+
+.watchlist-button:hover:not(:disabled) {
+  background-color: #0099c1;
+  transform: translateY(-1px);
+}
+
+.watchlist-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Style for when a movie is already in watchlist */
+.watchlist-button.in-watchlist {
+  background-color: #1ed5a9;
+}
+
+.watchlist-button.in-watchlist:hover:not(:disabled) {
+  background-color: #16a086;
+}

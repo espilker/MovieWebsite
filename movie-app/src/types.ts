@@ -111,3 +111,25 @@ export interface ReleaseDates {
   id: number;
   results: ReleaseDateResult[];
 }
+
+//User interface for logging in
+export interface User {
+  id: number;
+  username: string;
+  name: string;
+}
+
+//Interfaces to interact with/keep track of the watch lists
+export interface MovieAccountState {
+  id: number;
+  favorite: boolean;
+  rated: boolean | { value: number };
+  watchlist: boolean;
+}
+
+export interface WatchlistResponse {
+  page: number;
+  results: Movie[];
+  total_pages: number;
+  total_results: number;
+}
