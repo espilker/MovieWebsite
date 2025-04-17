@@ -38,7 +38,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Change Directories
-        run: npm cd movie-app
+        run: cd movie-app
       - name: Build
         run: npm run build
       - name: Setup Pages
