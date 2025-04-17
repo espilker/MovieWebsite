@@ -1,4 +1,4 @@
-# MovieWebsite
+# MovieWebsite 2025
 
 ## Project Description
 
@@ -7,17 +7,20 @@ This is a React application built with TypeScript and Vite that allows users to 
 ## Instructions to Run the Project
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/espilker/MovieWebsite.git
    cd movie-app
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    ```
 
 3. **Run the development server:**
+
    ```bash
    npm run dev
    ```
