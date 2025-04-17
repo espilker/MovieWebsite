@@ -1,9 +1,4 @@
 # MovieWebsite
-Absolutely! Here's the README file formatted for GitHub:
-
----
-
-# Movie Search App
 
 ## Project Description
 
@@ -14,7 +9,7 @@ This is a React application built with TypeScript and Vite that allows users to 
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/espilker/MovieWebsite.git
-   cd moviesearchapp
+   cd movie-app
    ```
 
 2. **Install dependencies:**
@@ -22,17 +17,12 @@ This is a React application built with TypeScript and Vite that allows users to 
    npm install
    ```
 
-3. **Navigate to correct folder:**
-   ```bash
-   cd movie-app
-   ```
-
-4. **Run the development server:**
+3. **Run the development server:**
    ```bash
    npm run dev
    ```
 
-5. **Open the application:**
+4. **Open the application:**
    Navigate to `http://localhost:3000` in your browser.
 
 ## API(s) Used and Data Handling
