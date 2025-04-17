@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { getWatchlist } from "../services/api";
 import { useAuth } from "../hooks/useAuth";
 import { Movie } from "../types";
 import "./Watchlist.css";
+import MovieDetails from "./MovieDetails.tsx";
 
 const Watchlist: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -12,6 +12,7 @@ const Watchlist: React.FC = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const { user, isAuthenticated } = useAuth();
+  const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
 
   //Function to grab the watchlist
   useEffect(() => {
@@ -42,6 +43,14 @@ const Watchlist: React.FC = () => {
 
     fetchWatchlist();
   }, [isAuthenticated, user, page]);
+
+  //Functions to handle clicking on a movie
+  const handleMovieClick = (movieId: number) => {
+    setSelectedMovieId(movieId);
+  };
+  const handleCloseDetails = () => {
+    setSelectedMovieId(null);
+  };
 
   //Function handle page navigation
   const handlePageChange = (newPage: number) => {
@@ -101,7 +110,10 @@ const Watchlist: React.FC = () => {
 
       <div className="watchlist-grid">
         {movies.map((movie) => (
-          <Link to={`/movie/${movie.id}`} key={movie.id} className="movie-card">
+          <button
+            className="movie-card"
+            onClick={() => handleMovieClick(movie.id)}
+          >
             {movie.poster_path ? (
               <img
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -119,7 +131,7 @@ const Watchlist: React.FC = () => {
                   : "N/A"}
               </p>
             </div>
-          </Link>
+          </button>
         ))}
       </div>
 
@@ -146,6 +158,8 @@ const Watchlist: React.FC = () => {
           </button>
         </div>
       )}
+      {/* Detail component for when a movie is clicked on */}
+      <MovieDetails movieId={selectedMovieId} onClose={handleCloseDetails} />
     </div>
   );
 };

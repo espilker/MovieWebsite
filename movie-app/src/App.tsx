@@ -15,15 +15,15 @@ const App: React.FC = () => {
     <Router>
       <Header />
       <div className="app">
-        <header className="app-header">
+        <div className="app-header">
           <h1>The Movie Manager</h1>
-        </header>
+        </div>
 
         <main className="app-main">
           {/* Navigation Tabs */}
           <div className="carousel-nav">
             <Link to="/discover" className="carousel-nav-button">
-              Searchy by Actor/Genre
+              Search by Actor/Genre
             </Link>
             <Link to="/search" className="carousel-nav-button">
               Search by Title
@@ -43,11 +43,12 @@ const App: React.FC = () => {
               </Link>
             )}
           </div>
+
           {/* Routes for each tab */}
           <Routes>
             <Route
               path="/discover"
-              element={<DiscoverCarousel title="Searcy by Actor/Genre" />}
+              element={<DiscoverCarousel title="Search by Actor/Genre" />}
             />
             <Route
               path="/search"
@@ -87,7 +88,7 @@ const App: React.FC = () => {
               }
             />
             <Route path="/watchlist" element={<Watchlist />} />
-          </Routes>{" "}
+          </Routes>
         </main>
       </div>
     </Router>

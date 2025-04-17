@@ -26,7 +26,7 @@ This is a React application built with TypeScript and Vite that allows users to 
    ```
 
 4. **Open the application:**
-   Navigate to `http://localhost:3000` in your browser.
+   Navigate to `http://localhost:5173` in your browser.
 
 ## API(s) Used and Data Handling
 
@@ -44,6 +44,7 @@ This is a React application built with TypeScript and Vite that allows users to 
 
 ## Additional Features
 
+- **Progressive Web App:** Users can download the site as a Progressive Web App
 - **Error Handling:** Displays user-friendly messages for API errors.
 - **Loading Indicators:** Shows loading spinners while fetching data.
 - **User Authentication:** Allows users to log in with their TMDb account and manage their watch list.

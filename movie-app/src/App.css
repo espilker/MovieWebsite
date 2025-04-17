@@ -1,3 +1,4 @@
+/* Existing styles */
 #root {
   max-width: 100%;
   margin: auto;
@@ -6,7 +7,6 @@
   min-height: 100vh;
   margin-bottom: 5%;
   width: 100%;
-  padding: 0 1em;
 }
 
 .card {
@@ -59,19 +59,22 @@ img {
   height: auto;
 }
 
+/* Mobile styles */
 @media (max-width: 768px) {
   .card {
     padding: 1em;
   }
 
   .carousel-nav {
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
   }
 
   .carousel-nav-button {
     margin-bottom: 5px;
     font-size: 14px;
     padding: 12px 18px;
+    width: 45%; /* Adjust width to fit two buttons per row */
+    text-align: center; /* Center text */
   }
 }
