@@ -35,10 +35,12 @@ jobs:
         with:
           node-version: lts/*
           cache: "npm"
+      - name: Change Directories
+        run: cd movie-app
+      - name: For testing
+        run: ls
       - name: Install dependencies
         run: npm ci
-      - name: Change Directories
-        run: ls
       - name: Build
         run: npm run build
       - name: Setup Pages
