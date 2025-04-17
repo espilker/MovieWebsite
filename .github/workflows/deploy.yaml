@@ -36,7 +36,6 @@ jobs:
           node-version: lts/*
           cache: "npm"
       - name: Install dependencies
-        working-directory: ./movie-app
         run: npm ci
 
       - name: Build
