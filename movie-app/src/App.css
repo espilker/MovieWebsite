@@ -5,6 +5,8 @@
   min-width: 320px;
   min-height: 100vh;
   margin-bottom: 5%;
+  width: 100%;
+  padding: 0 1em;
 }
 
 .card {
@@ -13,6 +15,7 @@
 
 .read-the-docs {
   color: #888;
+  font-size: 0.9em;
 }
 
 .carousel-nav {
@@ -22,6 +25,8 @@
   border-bottom: 1px solid #ddd;
   justify-content: center;
   margin: auto;
+  width: 100%;
+  padding: 0 1em;
 }
 
 .carousel-nav-button {
@@ -31,7 +36,7 @@
   border: none;
   border-radius: 4px 4px 0 0;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 1em;
   transition: background-color 0.3s;
 }
 
@@ -47,4 +52,26 @@
 
 .carousel-content {
   animation: fadeIn 0.3s ease-in-out;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 1em;
+  }
+
+  .carousel-nav {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .carousel-nav-button {
+    margin-bottom: 5px;
+    font-size: 14px;
+    padding: 12px 18px;
+  }
 }

@@ -39,6 +39,7 @@ jobs:
       - name: Build
         run: |
           cd movie-app
+          VITE_API_KEY=${{ secrets.API_KEY }} npm run build
           npm run build
 
       - name: Setup Pages
