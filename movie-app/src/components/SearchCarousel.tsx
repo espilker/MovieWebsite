@@ -1,11 +1,10 @@
+//Search by Title Page
+
 import { useState, useEffect } from "react";
 import { searchMovies, getMovies } from "../services/api";
 import Loading from "./Loading";
 import Error from "./Error";
-import { SliderSettings } from "../constants";
-import Carousel from "./Carousel.tsx";
 import MovieDetails from "./MovieDetails.tsx";
-import Slider from "react-slick";
 import { Movie } from "../types";
 import "./DiscoverCarousel.css";
 
@@ -100,19 +99,35 @@ const SearchCarousel = ({ title }: SearchCarouselProps) => {
       {error && !isLoading && <Error message={error} />}
 
       {!isLoading && !error && movies.length > 0 && (
-        <div className="carousel-container">
-          {/* Carousel to dipslay movies*/}
-          <Slider {...SliderSettings}>
-            {movies.map((movie) => (
-              <Carousel
-                key={movie.id}
-                movie={movie}
-                handleMovieClick={handleMovieClick}
-              />
-            ))}
-          </Slider>
+        <div className="watchlist-grid">
+          {movies.map((movie) => (
+            <button
+              key={movie.id}
+              className="movie-card"
+              onClick={() => handleMovieClick(movie.id)}
+            >
+              {movie.poster_path ? (
+                <img
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                  alt={movie.title}
+                  className="movie-poster"
+                />
+              ) : (
+                <div className="movie-poster-placeholder">No Image</div>
+              )}
+              <div className="movie-info">
+                <h3 className="movie-title">{movie.title}</h3>
+                <p className="movie-release-date">
+                  {movie.release_date
+                    ? new Date(movie.release_date).getFullYear()
+                    : "N/A"}
+                </p>
+              </div>
+            </button>
+          ))}
         </div>
       )}
+
       {/* Detail component for when a movie is clicked on */}
       <MovieDetails movieId={selectedMovieId} onClose={handleCloseDetails} />
 
@@ -122,4 +137,5 @@ const SearchCarousel = ({ title }: SearchCarouselProps) => {
     </div>
   );
 };
+
 export default SearchCarousel;

@@ -182,9 +182,16 @@ export const getWatchlist = async (
 };
 
 // Get a list of movies from a specific endpoint
-export const getMovies = async (endpoint: string): Promise<Movie[]> => {
+export const getMovies = async (
+  endpoint: string,
+  resultsPerPage: number = 50
+): Promise<Movie[]> => {
   try {
-    const response = await api.get<MovieListResponse>(endpoint);
+    const response = await api.get<MovieListResponse>(endpoint, {
+      params: {
+        per_page: resultsPerPage,
+      },
+    });
     return response.data.results;
   } catch (error) {
     console.error(`Error fetching movies from ${endpoint}:`, error);

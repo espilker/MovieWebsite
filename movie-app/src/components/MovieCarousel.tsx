@@ -1,15 +1,12 @@
+//Top Rated, Popular, Now Playing pages
+
 import React, { useState, useEffect } from "react";
-import Slider from "react-slick";
 import { Movie } from "../types.ts";
 import { getMovies } from "../services/api.ts";
-import { SliderSettings } from "../constants.ts";
-import Carousel from "./Carousel.tsx";
 import Loading from "./Loading.tsx";
 import Error from "./Error";
 import MovieDetails from "./MovieDetails.tsx";
 
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import "./MovieCarousel.css";
 
 interface MovieCarouselProps {
@@ -56,20 +53,37 @@ const MovieCarousel: React.FC<MovieCarouselProps> = ({ title, endpoint }) => {
   return (
     <div className="movie-carousel-section">
       <h2>{title}</h2>
-      <div className="carousel-container">
-        {/* Carousel Component to display movies */}
-        <Slider {...SliderSettings}>
-          {movies.map((movie) => (
-            <Carousel
-              key={movie.id}
-              movie={movie}
-              handleMovieClick={handleMovieClick}
-            />
-          ))}
-        </Slider>
+
+      {/* Grid layout instead of carousel */}
+      <div className="watchlist-grid">
+        {movies.map((movie) => (
+          <button
+            key={movie.id}
+            className="movie-card"
+            onClick={() => handleMovieClick(movie.id)}
+          >
+            {movie.poster_path ? (
+              <img
+                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                alt={movie.title}
+                className="movie-poster"
+              />
+            ) : (
+              <div className="movie-poster-placeholder">No Image</div>
+            )}
+            <div className="movie-info">
+              <h3 className="movie-title">{movie.title}</h3>
+              <p className="movie-release-date">
+                {movie.release_date
+                  ? new Date(movie.release_date).getFullYear()
+                  : "N/A"}
+              </p>
+            </div>
+          </button>
+        ))}
       </div>
 
-      {/* Movie details componet to show movie details */}
+      {/* Movie details component to show movie details */}
       <MovieDetails movieId={selectedMovieId} onClose={handleCloseDetails} />
     </div>
   );

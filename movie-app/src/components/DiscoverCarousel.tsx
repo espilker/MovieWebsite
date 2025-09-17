@@ -1,14 +1,11 @@
+// Search by ACtor/Genre Page
+
 import { useState, useEffect } from "react";
-import Slider from "react-slick";
 import { Movie } from "../types";
 import { discoverMovies, getGenres } from "../services/api";
-import { SliderSettings } from "../constants";
 import MovieDetails from "./MovieDetails.tsx";
-import Carousel from "./Carousel.tsx";
 import Loading from "./Loading.tsx";
 import Error from "./Error.tsx";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import "./MovieCarousel.css";
 import "./DiscoverCarousel.css";
 
@@ -137,7 +134,7 @@ const DiscoverCarousel = ({ title }: DiscoverCarouselProps) => {
         </div>
 
         <div className="genre-selection">
-          {/* Section for Genere selection */}
+          {/* Section for Genre selection */}
           <label className="genre-label">Genres:</label>
           <div className="genre-tags">
             {genres.map((genre) => (
@@ -164,17 +161,32 @@ const DiscoverCarousel = ({ title }: DiscoverCarouselProps) => {
       {error && !isLoading && <Error message={error} />}
 
       {!isLoading && !error && movies.length > 0 && (
-        <div className="carousel-container">
-          {/* Carousel component to display found movies */}
-          <Slider {...SliderSettings}>
-            {movies.map((movie) => (
-              <Carousel
-                key={movie.id}
-                movie={movie}
-                handleMovieClick={handleMovieClick}
-              />
-            ))}
-          </Slider>
+        <div className="watchlist-grid">
+          {movies.map((movie) => (
+            <button
+              key={movie.id}
+              className="movie-card"
+              onClick={() => handleMovieClick(movie.id)}
+            >
+              {movie.poster_path ? (
+                <img
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                  alt={movie.title}
+                  className="movie-poster"
+                />
+              ) : (
+                <div className="movie-poster-placeholder">No Image</div>
+              )}
+              <div className="movie-info">
+                <h3 className="movie-title">{movie.title}</h3>
+                <p className="movie-release-date">
+                  {movie.release_date
+                    ? new Date(movie.release_date).getFullYear()
+                    : "N/A"}
+                </p>
+              </div>
+            </button>
+          ))}
         </div>
       )}
 
